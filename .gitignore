@@ -1,0 +1,29 @@
+# .NET
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Logs
+*.log
+
+# React / Node
+node_modules/
+dist/
+build/
+
+# Environment files
+.env
+.env.local
+
+# Uploads (optionnel)
+wwwroot/uploads/
+
+# OS
+Thumbs.db
+.DS_Store
+
+.pdf
