@@ -5,6 +5,7 @@ import ProtectedRoute from './routes/ProtectedRoute';
 
 // Shared Components
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
 // Public Pages
 import HomePage from './pages/public/HomePage';
@@ -128,16 +129,7 @@ function App() {
           </main>
 
           {/* Footer Component */}
-          <footer className="bg-white border-top py-4 text-center mt-5">
-            <div className="container">
-              <p className="text-secondary small mb-1 fw-semibold">
-                &copy; {new Date().getFullYear()} UniRecruit Portal. All rights reserved.
-              </p>
-              <small className="text-muted">
-                Academic Capstone Final-Year Project Development Phase.
-              </small>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </Router>
     </AuthProvider>

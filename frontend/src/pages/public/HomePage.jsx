@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getJobs } from '../../api/jobs';
 import JobCard from '../../components/JobCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { motion } from 'framer-motion';
+import { FaSearch, FaMapMarkerAlt, FaBriefcase, FaGraduationCap, FaCheckCircle, FaBell } from 'react-icons/fa';
 
 const HomePage = () => {
   const [featuredJobs, setFeaturedJobs] = useState([]);
@@ -37,8 +39,13 @@ const HomePage = () => {
       <section className="hero-section text-center text-lg-start">
         <div className="container">
           <div className="row align-items-center">
-            <div className="col-lg-6 mb-5 mb-lg-0 animate-fade-in-up">
-              <span className="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold mb-3">
+            <motion.div 
+              className="col-lg-6 mb-5 mb-lg-0"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">
                 🎓 EXCLUSIVE FOR STUDENTS & RECRUITERS
               </span>
               <h1 className="display-4 fw-extrabold mb-3" style={{ lineHeight: '1.2' }}>
@@ -49,12 +56,17 @@ const HomePage = () => {
               </p>
 
               {/* Direct Quick Search Bar */}
-              <div className="card border-0 shadow-lg p-3 glass-panel rounded-xl" style={{ maxWidth: '95%' }}>
+              <motion.div 
+                className="card border-0 shadow-lg p-3 glass-panel rounded-xl" 
+                style={{ maxWidth: '95%' }}
+                whileHover={{ y: -5, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                transition={{ duration: 0.3 }}
+              >
                 <form onSubmit={handleSearchSubmit} className="row g-2">
                   <div className="col-md-5">
-                    <div className="input-group">
+                    <div className="input-group h-100">
                       <span className="input-group-text bg-transparent border-0 text-muted">
-                        <i className="bi bi-search"></i>
+                        <FaSearch />
                       </span>
                       <input 
                         type="text" 
@@ -66,9 +78,9 @@ const HomePage = () => {
                     </div>
                   </div>
                   <div className="col-md-4 border-start border-md-0">
-                    <div className="input-group">
+                    <div className="input-group h-100">
                       <span className="input-group-text bg-transparent border-0 text-muted">
-                        <i className="bi bi-geo-alt"></i>
+                        <FaMapMarkerAlt />
                       </span>
                       <input 
                         type="text" 
@@ -85,17 +97,22 @@ const HomePage = () => {
                     </button>
                   </div>
                 </form>
-              </div>
+              </motion.div>
 
               <div className="mt-4 d-flex flex-wrap gap-3 align-items-center text-secondary small">
                 <span className="fw-semibold">Popular categories:</span>
-                <Link to="/jobs?type=Internship" className="badge bg-light text-secondary border text-decoration-none px-3 py-2">Software Engineering</Link>
-                <Link to="/jobs?type=Internship" className="badge bg-light text-secondary border text-decoration-none px-3 py-2">Data Science</Link>
-                <Link to="/jobs?type=Internship" className="badge bg-light text-secondary border text-decoration-none px-3 py-2">Remote</Link>
+                <Link to="/jobs?type=Internship" className="badge bg-white shadow-sm text-secondary border text-decoration-none px-3 py-2">Software Engineering</Link>
+                <Link to="/jobs?type=Internship" className="badge bg-white shadow-sm text-secondary border text-decoration-none px-3 py-2">Data Science</Link>
+                <Link to="/jobs?type=Remote" className="badge bg-white shadow-sm text-secondary border text-decoration-none px-3 py-2">Remote</Link>
               </div>
-            </div>
+            </motion.div>
 
-            <div className="col-lg-6 d-none d-lg-block text-center position-relative">
+            <motion.div 
+              className="col-lg-6 d-none d-lg-block text-center position-relative"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               <div className="position-absolute bg-primary-subtle rounded-circle filter-blur" style={{ width: '400px', height: '400px', top: '-50px', right: '-50px', filter: 'blur(80px)', opacity: '0.6', zIndex: '0' }}></div>
               <img 
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" 
@@ -103,7 +120,7 @@ const HomePage = () => {
                 className="img-fluid rounded-xl shadow-2xl position-relative border border-white border-4" 
                 style={{ zIndex: '1', borderRadius: '24px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' }}
               />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -112,46 +129,37 @@ const HomePage = () => {
       <section className="py-5 bg-white">
         <div className="container py-4">
           <div className="text-center mb-5">
-            <h2 className="display-6 fw-bold">Why Choose <span className="gradient-text">UniRecruit</span>?</h2>
+            <h2 className="display-6 fw-bold">Why Choose <span className="gradient-text">JobPortal</span>?</h2>
             <p className="text-secondary" style={{ maxWidth: '600px', margin: '0 auto' }}>
-              Built specifically to facilitate academic recruitment, internships, and entry-level career stages.
+              Built specifically to facilitate academic recruitment, internships, and entry-level career stages with a highly polished platform.
             </p>
           </div>
 
           <div className="row g-4">
-            <div className="col-md-4">
-              <div className="card border-0 h-100 p-4 rounded-lg bg-light text-center">
-                <div className="d-inline-flex align-items-center justify-content-center bg-primary-subtle text-primary rounded-circle mb-3" style={{ width: '60px', height: '60px' }}>
-                  <i className="bi bi-mortarboard fs-3"></i>
+            {[
+              { icon: <FaGraduationCap />, title: "Student Profiles", desc: "Build your custom profile, add academic highlights, summarize your technical skills, and upload your PDF resume securely.", color: "primary" },
+              { icon: <FaCheckCircle />, title: "Direct Internships", desc: "Connect immediately with leading local and international firms posting official part-time and summer internships.", color: "success" },
+              { icon: <FaBell />, title: "Real-time Tracking", desc: "Stay updated instantly! Track your applications from pending to review and final decisions on your modern dashboard.", color: "info" }
+            ].map((feature, i) => (
+              <motion.div 
+                className="col-md-4" 
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <div className="card border-0 h-100 p-4 rounded-lg bg-light text-center premium-card">
+                  <div className={`d-inline-flex align-items-center justify-content-center bg-${feature.color}-subtle text-${feature.color} rounded-circle mb-3 mx-auto shadow-sm`} style={{ width: '60px', height: '60px', fontSize: '1.5rem' }}>
+                    {feature.icon}
+                  </div>
+                  <h4 className="fw-bold mb-2">{feature.title}</h4>
+                  <p className="text-secondary small">
+                    {feature.desc}
+                  </p>
                 </div>
-                <h4 className="fw-bold mb-2">Student Profiles</h4>
-                <p className="text-secondary small">
-                  Build your custom profile, add academic highlights, summarize your technical skills, and upload your PDF resume securely.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card border-0 h-100 p-4 rounded-lg bg-light text-center">
-                <div className="d-inline-flex align-items-center justify-content-center bg-success-subtle text-success rounded-circle mb-3" style={{ width: '60px', height: '60px' }}>
-                  <i className="bi bi-patch-check fs-3"></i>
-                </div>
-                <h4 className="fw-bold mb-2">Direct Internships</h4>
-                <p className="text-secondary small">
-                  Connect immediately with leading local and international firms posting official part-time and summer internships.
-                </p>
-              </div>
-            </div>
-            <div className="col-md-4">
-              <div className="card border-0 h-100 p-4 rounded-lg bg-light text-center">
-                <div className="d-inline-flex align-items-center justify-content-center bg-info-subtle text-info rounded-circle mb-3" style={{ width: '60px', height: '60px' }}>
-                  <i className="bi bi-clock-history fs-3"></i>
-                </div>
-                <h4 className="fw-bold mb-2">Mock Notification Alerts</h4>
-                <p className="text-secondary small">
-                  Stay updated instantly! Our mock alert service logs and reports exact job status progress on console when applications update.
-                </p>
-              </div>
-            </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -164,8 +172,8 @@ const HomePage = () => {
               <h2 className="fw-bold display-6 mb-1">Latest Job Openings</h2>
               <p className="text-secondary mb-0">Browse recently posted internships and job positions.</p>
             </div>
-            <Link to="/jobs" className="btn btn-outline-primary d-none d-sm-inline-block">
-              View All Openings <i className="bi bi-arrow-right ms-1"></i>
+            <Link to="/jobs" className="btn btn-outline-primary d-none d-sm-inline-block shadow-sm">
+              View All Openings
             </Link>
           </div>
 
@@ -173,22 +181,22 @@ const HomePage = () => {
             <LoadingSpinner message="Fetching featured job opportunities..." />
           ) : featuredJobs.length === 0 ? (
             <div className="text-center py-5">
-              <i className="bi bi-briefcase text-muted fs-1 mb-3"></i>
+              <FaBriefcase className="text-muted display-4 mb-3" />
               <p className="text-secondary fw-semibold">No jobs posted recently. Check back soon!</p>
             </div>
           ) : (
-            <div className="row">
-              {featuredJobs.map((job) => (
+            <div className="row g-4 align-items-stretch">
+              {featuredJobs.map((job, idx) => (
                 <div key={job.id} className="col-lg-4 col-md-6 col-12">
-                  <JobCard job={job} />
+                  <JobCard job={job} index={idx} />
                 </div>
               ))}
             </div>
           )}
 
           <div className="text-center mt-4 d-sm-none">
-            <Link to="/jobs" className="btn btn-outline-primary w-100">
-              View All Openings <i className="bi bi-arrow-right ms-1"></i>
+            <Link to="/jobs" className="btn btn-outline-primary w-100 shadow-sm">
+              View All Openings
             </Link>
           </div>
         </div>

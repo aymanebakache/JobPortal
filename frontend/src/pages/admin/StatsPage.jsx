@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getAdminStats } from '../../api/admin';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FaUsers, FaBriefcase, FaFileAlt, FaChartLine, FaUserTie, FaBuilding } from 'react-icons/fa';
+import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const StatsPage = () => {
   const [stats, setStats] = useState(null);
@@ -34,6 +38,23 @@ const StatsPage = () => {
     );
   }
 
+  // Data for Recharts
+  const userDistributionData = [
+    { name: 'Candidates', value: stats.totalCandidates, color: '#4f46e5' },
+    { name: 'Recruiters', value: stats.totalRecruiters, color: '#10b981' },
+  ];
+
+  const applicationStatusData = [
+    { name: 'Pending', count: stats.pendingApplications, color: '#f59e0b' },
+    { name: 'Accepted', count: stats.acceptedApplications, color: '#10b981' },
+    { name: 'Rejected', count: stats.rejectedApplications, color: '#ef4444' },
+  ];
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+  };
+
   return (
     <div className="container py-5">
       <div className="mb-5">
@@ -44,145 +65,128 @@ const StatsPage = () => {
       {/* Analytics Card Row */}
       <div className="row g-4 mb-5">
         {/* User Card */}
-        <div className="col-lg-3 col-md-6 col-12 animate-fade-in-up">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="text-muted small fw-bold text-uppercase">Total Accounts</span>
-                <div className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                  <i className="bi bi-people-fill"></i>
-                </div>
-              </div>
-              <h2 className="fw-bold display-6 mb-1">{stats.totalUsers}</h2>
-              <div className="small text-muted">
-                {stats.totalCandidates} Candidates | {stats.totalRecruiters} Companies
+        <motion.div className="col-lg-3 col-md-6 col-12" variants={cardVariants} initial="hidden" animate="visible">
+          <div className="premium-card p-4 h-100">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span className="text-muted small fw-bold text-uppercase">Total Accounts</span>
+              <div className="bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '45px', height: '45px' }}>
+                <FaUsers className="fs-5" />
               </div>
             </div>
+            <h2 className="fw-bold display-6 mb-1">{stats.totalUsers}</h2>
+            <div className="small text-muted d-flex gap-2">
+              <span title="Candidates"><FaUserTie /> {stats.totalCandidates}</span>
+              <span>|</span>
+              <span title="Recruiters"><FaBuilding /> {stats.totalRecruiters}</span>
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Jobs Card */}
-        <div className="col-lg-3 col-md-6 col-12 animate-fade-in-up">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="text-muted small fw-bold text-uppercase">Published Offers</span>
-                <div className="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                  <i className="bi bi-briefcase-fill"></i>
-                </div>
-              </div>
-              <h2 className="fw-bold display-6 mb-1">{stats.totalJobs}</h2>
-              <div className="small text-muted">
-                <span className="text-success fw-bold">● {stats.activeJobs} Active Offers</span>
+        <motion.div className="col-lg-3 col-md-6 col-12" variants={cardVariants} initial="hidden" animate="visible" transition={{ delay: 0.1 }}>
+          <div className="premium-card p-4 h-100">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span className="text-muted small fw-bold text-uppercase">Published Offers</span>
+              <div className="bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style={{ width: '45px', height: '45px' }}>
+                <FaBriefcase className="fs-5" />
               </div>
             </div>
+            <h2 className="fw-bold display-6 mb-1">{stats.totalJobs}</h2>
+            <div className="small text-success fw-bold">
+              ● {stats.activeJobs} Active Offers
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Applications Card */}
-        <div className="col-lg-3 col-md-6 col-12 animate-fade-in-up">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="text-muted small fw-bold text-uppercase">Submitted Apps</span>
-                <div className="bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                  <i className="bi bi-file-earmark-check-fill"></i>
-                </div>
-              </div>
-              <h2 className="fw-bold display-6 mb-1">{stats.totalApplications}</h2>
-              <div className="small text-muted">
-                {stats.pendingApplications} Pending Review
+        <motion.div className="col-lg-3 col-md-6 col-12" variants={cardVariants} initial="hidden" animate="visible" transition={{ delay: 0.2 }}>
+          <div className="premium-card p-4 h-100">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span className="text-muted small fw-bold text-uppercase">Submitted Apps</span>
+              <div className="bg-info-subtle text-info rounded-circle d-flex align-items-center justify-content-center" style={{ width: '45px', height: '45px' }}>
+                <FaFileAlt className="fs-5" />
               </div>
             </div>
+            <h2 className="fw-bold display-6 mb-1">{stats.totalApplications}</h2>
+            <div className="small text-muted">
+              {stats.pendingApplications} Pending Review
+            </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Success Rate */}
-        <div className="col-lg-3 col-md-6 col-12 animate-fade-in-up">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span className="text-muted small fw-bold text-uppercase">Acceptance Rate</span>
-                <div className="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style={{ width: '40px', height: '40px' }}>
-                  <i className="bi bi-graph-up-arrow"></i>
-                </div>
-              </div>
-              <h2 className="fw-bold display-6 mb-1">
-                {stats.totalApplications > 0 
-                  ? `${Math.round((stats.acceptedApplications / stats.totalApplications) * 100)}%`
-                  : '0%'
-                }
-              </h2>
-              <div className="small text-muted">
-                {stats.acceptedApplications} Shortlisted applications
+        <motion.div className="col-lg-3 col-md-6 col-12" variants={cardVariants} initial="hidden" animate="visible" transition={{ delay: 0.3 }}>
+          <div className="premium-card p-4 h-100">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span className="text-muted small fw-bold text-uppercase">Acceptance Rate</span>
+              <div className="bg-warning-subtle text-warning rounded-circle d-flex align-items-center justify-content-center" style={{ width: '45px', height: '45px' }}>
+                <FaChartLine className="fs-5" />
               </div>
             </div>
+            <h2 className="fw-bold display-6 mb-1">
+              {stats.totalApplications > 0
+                ? `${Math.round((stats.acceptedApplications / stats.totalApplications) * 100)}%`
+                : '0%'
+              }
+            </h2>
+            <div className="small text-muted">
+              {stats.acceptedApplications} Shortlisted applications
+            </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* Detail Analytics breakdowns */}
       <div className="row g-4">
-        {/* Applications status ratios */}
-        <div className="col-lg-6 col-12">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <h4 className="fw-bold font-heading mb-4">Application Reviews Pipeline</h4>
-              
-              <div className="mb-4">
-                <div className="d-flex justify-content-between mb-1 small fw-semibold text-secondary">
-                  <span>Pending Evaluation</span>
-                  <span>{stats.pendingApplications} ({stats.totalApplications > 0 ? Math.round((stats.pendingApplications / stats.totalApplications) * 100) : 0}%)</span>
-                </div>
-                <div className="progress" style={{ height: '10px' }}>
-                  <div className="progress-bar bg-warning" role="progressbar" style={{ width: `${stats.totalApplications > 0 ? (stats.pendingApplications / stats.totalApplications) * 100 : 0}%` }}></div>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <div className="d-flex justify-content-between mb-1 small fw-semibold text-secondary">
-                  <span>Shortlisted / Hired</span>
-                  <span>{stats.acceptedApplications} ({stats.totalApplications > 0 ? Math.round((stats.acceptedApplications / stats.totalApplications) * 100) : 0}%)</span>
-                </div>
-                <div className="progress" style={{ height: '10px' }}>
-                  <div className="progress-bar bg-success" role="progressbar" style={{ width: `${stats.totalApplications > 0 ? (stats.acceptedApplications / stats.totalApplications) * 100 : 0}%` }}></div>
-                </div>
-              </div>
-
-              <div className="mb-2">
-                <div className="d-flex justify-content-between mb-1 small fw-semibold text-secondary">
-                  <span>Rejected / Closed</span>
-                  <span>{stats.rejectedApplications} ({stats.totalApplications > 0 ? Math.round((stats.rejectedApplications / stats.totalApplications) * 100) : 0}%)</span>
-                </div>
-                <div className="progress" style={{ height: '10px' }}>
-                  <div className="progress-bar bg-danger" role="progressbar" style={{ width: `${stats.totalApplications > 0 ? (stats.rejectedApplications / stats.totalApplications) * 100 : 0}%` }}></div>
-                </div>
-              </div>
-
+        {/* User Distribution Chart */}
+        <motion.div className="col-lg-6 col-12" variants={cardVariants} initial="hidden" animate="visible" transition={{ delay: 0.4 }}>
+          <div className="premium-card p-4 h-100">
+            <h4 className="fw-bold font-heading mb-4">User Distribution</h4>
+            <div style={{ height: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={userDistributionData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                  >
+                    {userDistributionData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <RechartsTooltip />
+                  <Legend verticalAlign="bottom" height={36} />
+                </PieChart>
+              </ResponsiveContainer>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* System activity logs */}
-        <div className="col-lg-6 col-12">
-          <div className="card border-0 shadow-sm p-4 rounded-lg bg-white h-100">
-            <div className="card-body">
-              <h4 className="fw-bold font-heading mb-4">Quick Operations Shortcuts</h4>
-              <p className="text-secondary small">As platform administrator, you hold central management controls. Use the navigation links to perform actions:</p>
-              
-              <div className="d-grid gap-3 mt-4">
-                <Link to="/admin/users" className="btn btn-outline-primary py-2.5 text-start d-flex justify-content-between align-items-center">
-                  <span><i className="bi bi-people me-2"></i> Manage User Accounts</span>
-                  <i className="bi bi-chevron-right"></i>
-                </Link>
-                <Link to="/admin/jobs" className="btn btn-outline-primary py-2.5 text-start d-flex justify-content-between align-items-center">
-                  <span><i className="bi bi-trash3 me-2"></i> Manage Active Listings</span>
-                  <i className="bi bi-chevron-right"></i>
-                </Link>
-              </div>
+        {/* Application Status Chart */}
+        <motion.div className="col-lg-6 col-12" variants={cardVariants} initial="hidden" animate="visible" transition={{ delay: 0.5 }}>
+          <div className="premium-card p-4 h-100">
+            <h4 className="fw-bold font-heading mb-4">Application Reviews Pipeline</h4>
+            <div style={{ height: '300px' }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={applicationStatusData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                  <XAxis dataKey="name" />
+                  <YAxis allowDecimals={false} />
+                  <RechartsTooltip cursor={{ fill: 'rgba(79, 70, 229, 0.05)' }} />
+                  <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                    {applicationStatusData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   );

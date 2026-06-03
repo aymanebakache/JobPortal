@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { getJobs } from '../../api/jobs';
 import JobCard from '../../components/JobCard';
 import LoadingSpinner from '../../components/LoadingSpinner';
+import { FaSearch, FaMapMarkerAlt, FaBriefcase, FaMoneyBillWave } from 'react-icons/fa';
 
 const JobListPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -88,7 +89,7 @@ const JobListPage = () => {
                 <label className="form-label small fw-semibold text-secondary">Search Keyword</label>
                 <div className="input-group">
                   <span className="input-group-text bg-light text-muted border-2 border-end-0">
-                    <i className="bi bi-search"></i>
+                    <FaSearch />
                   </span>
                   <input 
                     type="text" 
@@ -104,7 +105,7 @@ const JobListPage = () => {
                 <label className="form-label small fw-semibold text-secondary">Location</label>
                 <div className="input-group">
                   <span className="input-group-text bg-light text-muted border-2 border-end-0">
-                    <i className="bi bi-geo-alt"></i>
+                    <FaMapMarkerAlt />
                   </span>
                   <input 
                     type="text" 
@@ -120,7 +121,7 @@ const JobListPage = () => {
                 <label className="form-label small fw-semibold text-secondary">Employment Type</label>
                 <div className="input-group">
                   <span className="input-group-text bg-light text-muted border-2 border-end-0">
-                    <i className="bi bi-briefcase"></i>
+                    <FaBriefcase />
                   </span>
                   <select 
                     className="form-select border-2 border-start-0 ps-0" 
@@ -140,7 +141,7 @@ const JobListPage = () => {
                 <label className="form-label small fw-semibold text-secondary">Minimum Salary (DH)</label>
                 <div className="input-group">
                   <span className="input-group-text bg-light text-muted border-2 border-end-0">
-                    <i className="bi bi-cash-stack"></i>
+                    <FaMoneyBillWave />
                   </span>
                   <input 
                     type="number" 
@@ -172,7 +173,7 @@ const JobListPage = () => {
           ) : jobs.length === 0 ? (
             <div className="card border-0 shadow-sm p-5 rounded-lg bg-white text-center">
               <div className="card-body py-5">
-                <i className="bi bi-search text-muted display-3 mb-3 d-inline-block"></i>
+                <FaSearch className="text-muted display-3 mb-3 d-inline-block" />
                 <h4 className="fw-bold font-heading">No Jobs Found</h4>
                 <p className="text-secondary small mb-4" style={{ maxWidth: '400px', margin: '0 auto' }}>
                   We couldn't find any active jobs matching your filters. Try widening your search keywords or location!

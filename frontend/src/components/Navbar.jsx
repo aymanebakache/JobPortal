@@ -1,33 +1,49 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { FaBriefcase, FaSearch, FaFileAlt, FaUserTie, FaBuilding, FaPlusCircle, FaTachometerAlt, FaUsers, FaTrashAlt, FaUserCircle, FaCog, FaSignOutAlt } from 'react-icons/fa';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
 
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate('/login');
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-premium navbar-light sticky-top">
+    <nav className="navbar navbar-expand-lg navbar-premium navbar-light sticky-top shadow-sm">
       <div className="container">
         <Link className="navbar-brand d-flex align-items-center" to="/">
-          <i className="bi bi-briefcase-fill text-primary me-2 fs-3"></i>
+          <FaBriefcase className="text-primary me-2 fs-3" />
           <span className="fw-bold fs-4 text-primary font-heading">UniRecruit</span>
         </Link>
         
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button className="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
           <span className="navbar-toggler-icon"></span>
         </button>
         
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-2">
             <li className="nav-item">
-              <Link className="nav-link fw-semibold text-secondary" to="/jobs">
-                <i className="bi bi-search me-1"></i> Browse Jobs
+              <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/jobs">
+                <FaSearch /> Browse Jobs
               </Link>
             </li>
             
@@ -35,13 +51,13 @@ const Navbar = () => {
             {user && user.role === 'Candidate' && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/candidate/applications">
-                    <i className="bi bi-file-earmark-check me-1"></i> My Applications
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/candidate/applications">
+                    <FaFileAlt /> My Applications
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/candidate/profile">
-                    <i className="bi bi-person-badge me-1"></i> My Profile
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/candidate/profile">
+                    <FaUserTie /> My Profile
                   </Link>
                 </li>
               </>
@@ -51,18 +67,18 @@ const Navbar = () => {
             {user && user.role === 'Recruiter' && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/recruiter/jobs">
-                    <i className="bi bi-building-gear me-1"></i> Manage Jobs
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/recruiter/jobs">
+                    <FaBriefcase /> Manage Jobs
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/recruiter/jobs/new">
-                    <i className="bi bi-plus-circle me-1"></i> Post a Job
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/recruiter/jobs/new">
+                    <FaPlusCircle /> Post a Job
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/candidate/profile">
-                    <i className="bi bi-building me-1"></i> Company Profile
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/candidate/profile">
+                    <FaBuilding /> Company Profile
                   </Link>
                 </li>
               </>
@@ -72,18 +88,18 @@ const Navbar = () => {
             {user && user.role === 'Admin' && (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/admin/stats">
-                    <i className="bi bi-speedometer2 me-1"></i> Admin Dashboard
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/admin/stats">
+                    <FaTachometerAlt /> Admin Dashboard
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/admin/users">
-                    <i className="bi bi-people me-1"></i> Manage Users
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/admin/users">
+                    <FaUsers /> Manage Users
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link fw-semibold text-secondary" to="/admin/jobs">
-                    <i className="bi bi-trash3 me-1"></i> Manage Jobs
+                  <Link className="nav-link fw-semibold text-secondary d-flex align-items-center gap-1" to="/admin/jobs">
+                    <FaTrashAlt /> Manage Jobs
                   </Link>
                 </li>
               </>
@@ -92,28 +108,26 @@ const Navbar = () => {
           
           <div className="d-flex align-items-center gap-2">
             {user ? (
-              <div className="dropdown">
+              <div className="dropdown" ref={dropdownRef}>
                 <button 
                   className="btn btn-outline-primary dropdown-toggle d-flex align-items-center gap-2" 
                   type="button" 
-                  id="userDropdown" 
-                  data-bs-toggle="dropdown" 
-                  aria-expanded="false"
+                  onClick={() => setDropdownOpen(!dropdownOpen)}
                 >
-                  <i className="bi bi-person-circle fs-5"></i>
+                  <FaUserCircle className="fs-5" />
                   <span>{user.name}</span>
                   <span className="badge bg-secondary text-white text-uppercase" style={{ fontSize: '0.65rem' }}>{user.role}</span>
                 </button>
-                <ul className="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                <ul className={`dropdown-menu dropdown-menu-end shadow-sm border-0 ${dropdownOpen ? 'show' : ''}`} style={{ position: 'absolute', right: 0, top: '100%', zIndex: 1050 }}>
                   <li>
-                    <Link className="dropdown-item py-2" to="/candidate/profile">
-                      <i className="bi bi-gear me-2"></i> Settings
+                    <Link className="dropdown-item py-2 d-flex align-items-center gap-2" to="/settings" onClick={() => setDropdownOpen(false)}>
+                      <FaCog /> Settings
                     </Link>
                   </li>
                   <li><hr className="dropdown-divider" /></li>
                   <li>
-                    <button className="dropdown-item py-2 text-danger" onClick={handleLogout}>
-                      <i className="bi bi-box-arrow-right me-2"></i> Logout
+                    <button className="dropdown-item py-2 text-danger d-flex align-items-center gap-2" onClick={() => { setDropdownOpen(false); handleLogout(); }}>
+                      <FaSignOutAlt /> Logout
                     </button>
                   </li>
                 </ul>
